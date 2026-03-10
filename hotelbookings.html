@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Hotel Dashboard - Chittoor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: #f4f5f7;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: #1e2a38;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 30px;
+            z-index: 1000;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            font-weight: 700;
+            font-size: 22px;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #f1c40f;
+        }
+
+        /* Hero */
+        .hero {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            margin: 20px;
+        }
+
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .hero img.active {
+            opacity: 1;
+        }
+
+        .hero-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-text button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            background: #f1c40f;
+            font-weight: 600;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .hero-text button:hover {
+            background: #d4ac0d;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        @media(max-width:992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Room Cards */
+        .rooms {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .room-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .room-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .room-card .info {
+            padding: 12px;
+        }
+
+        .room-card .info h3 {
+            margin-bottom: 3px;
+            font-size: 18px;
+        }
+
+        .room-card .info p {
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .room-card .info .price {
+            color: #f1c40f;
+            font-weight: 700;
+            margin: 8px 0;
+        }
+
+        .room-card .info button {
+            padding: 6px 12px;
+            border: none;
+            background: #1e2a38;
+            color: white;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .room-card .info button:hover {
+            background: #f1c40f;
+            color: #1e2a38;
+        }
+
+        /* Booking Sidebar */
+        .booking {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .booking h3 {
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .booking form {
+            display: grid;
+            gap: 10px;
+        }
+
+        .booking form input,
+        .booking form select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .booking form button {
+            padding: 10px;
+            background: #1e2a38;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .booking form button:hover {
+            background: #f1c40f;
+            color: #1e2a38;
+        }
+
+        .total-price {
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .confirmation {
+            background: #f1f1f1;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .confirmation p {
+            margin-bottom: 5px;
+        }
+
+        /* Payment Section */
+        .payment {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        .payment h4 {
+            margin-bottom: 10px;
+        }
+
+        .payment img {
+            width: 120px;
+            margin: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        .payment img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Reviews Carousel */
+        .reviews {
+            margin: 30px;
+        }
+
+        .review-carousel {
+            overflow: hidden;
+            position: relative;
+            height: 90px;
+        }
+
+        .review-track {
+            display: flex;
+            animation: scrollReviews 20s linear infinite;
+        }
+
+        .review-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-right: 10px;
+            flex: 0 0 250px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .review-card .star {
+            color: #f1c40f;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        @keyframes scrollReviews {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Nearby Hotels */
+        .nearby {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .nearby-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .nearby-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .nearby-card .info {
+            padding: 12px;
+        }
+
+        .nearby-card .info h4 {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .nearby-card .info .star {
+            color: #f1c40f;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            background: #1e2a38;
+            color: white;
+            padding: 15px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <h2>Grand Hotel</h2>
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#rooms-section">Rooms</a></li>
+            <li><a href="#booking-sidebar">Booking</a></li>
+            <li><a href="#reviews-section">Reviews</a></li>
+            <li><a href="#nearby-section">Nearby Hotels</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"
+            class="active">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80">
+        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=80">
+        <div class="hero-text">
+            Welcome to Grand Hotel
+            <br><button onclick="document.getElementById('booking-sidebar').scrollIntoView({behavior:'smooth'})">Book
+                Now</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+
+        <!-- Room Cards -->
+        <div>
+            <h2 id="rooms-section">Available Rooms</h2>
+            <div class="rooms">
+                <div class="room-card" data-price="3750">
+                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=800&q=80"
+                        alt="Single Room">
+                    <div class="info">
+                        <h3>Single Room</h3>
+                        <p>1 Person</p>
+                        <p class="price">₹3,750 / Night</p>
+                        <button onclick="selectRoom('Single Room', 3750)">Book Now</button>
+                    </div>
+                </div>
+                <div class="room-card" data-price="6750">
+                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80"
+                        alt="Double Room">
+                    <div class="info">
+                        <h3>Double Room</h3>
+                        <p>2 Persons</p>
+                        <p class="price">₹6,750 / Night</p>
+                        <button onclick="selectRoom('Double Room', 6750)">Book Now</button>
+                    </div>
+                </div>
+                <div class="room-card" data-price="11250">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+                        alt="Luxury Suite">
+                    <div class="info">
+                        <h3>Luxury Suite</h3>
+                        <p>4 Persons</p>
+                        <p class="price">₹11,250 / Night</p>
+                        <button onclick="selectRoom('Luxury Suite', 11250)">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Sidebar -->
+        <div class="booking" id="booking-sidebar">
+            <h3>Book Your Stay</h3>
+            <form id="bookingForm">
+                <input type="text" placeholder="Full Name" name="name" required>
+                <input type="email" placeholder="Email" name="email" required>
+                <input type="tel" placeholder="Phone Number" name="phone" required>
+                <select name="roomType" id="roomType" required>
+                    <option value="">Select Room Type</option>
+                    <option value="Single Room" data-price="3750">Single Room</option>
+                    <option value="Double Room" data-price="6750">Double Room</option>
+                    <option value="Luxury Suite" data-price="11250">Luxury Suite</option>
+                </select>
+                <input type="date" name="checkin" required>
+                <input type="date" name="checkout" required>
+                <input type="number" placeholder="Number of Guests" name="guests" required>
+                <select name="mealPlan" required>
+                    <option value="">Meal Plan</option>
+                    <option value="Room Only">Room Only</option>
+                    <option value="Breakfast Included">Breakfast Included</option>
+                    <option value="All Inclusive">All Inclusive</option>
+                </select>
+                <select name="bedPreference" required>
+                    <option value="">Bed Preference</option>
+                    <option value="King Bed">King Bed</option>
+                    <option value="Twin Bed">Twin Bed</option>
+                    <option value="Queen Bed">Queen Bed</option>
+                </select>
+                <button type="submit">Confirm Booking</button>
+            </form>
+            <div class="total-price" id="totalPriceDisplay">Total Price: ₹0</div>
+
+            <!-- Payment Section -->
+            <div class="payment">
+                <h4>Payment Options</h4>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/UPI_Logo.svg/320px-UPI_Logo.svg.png"
+                    alt="UPI QR">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Razorpay_logo.png" alt="Razorpay">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa_2021.svg" alt="Card Payment">
+            </div>
+
+            <div class="confirmation hidden" id="confirmationBox"></div>
+        </div>
+
+    </div>
+
+    <!-- Reviews Carousel -->
+    <section class="reviews" id="reviews-section">
+        <h2>Guest Reviews</h2>
+        <div class="review-carousel">
+            <div class="review-track">
+                <div class="review-card">
+                    <p class="star">⭐️ 4.7 / 5</p>
+                    <p>"Amazing stay! Beach view was breathtaking, staff excellent." – John D.</p>
+                </div>
+                <div class="review-card">
+                    <p class="star">⭐️ 4.5 / 5</p>
+                    <p>"Luxury rooms with hill station vibes. Perfect weekend." – Priya K.</p>
+                </div>
+                <div class="review-card">
+                    <p class="star">⭐️ 4.6 / 5</p>
+                    <p>"Beautiful resort, delicious breakfast, clean rooms." – Arjun M.</p>
+                </div>
+                <div class="review-card">
+                    <p class="star">⭐️ 4.8 / 5</p>
+                    <p>"Excellent location, comfy beds, amazing service." – Kavya S.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nearby Hotels -->
+    <section class="nearby" id="nearby-section">
+        <h2>Nearby Hotels & Stays</h2>
+        <div class="nearby-card">
+            <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80"
+                alt="HSM Grand">
+            <div class="info">
+                <h4>HSM Grand</h4>
+                <p class="star">⭐️ 4.3 / 5</p>
+            </div>
+        </div>
+        <div class="nearby-card">
+            <img src="https://images.unsplash.com/photo-1576675785267-4ed433a30dfb?auto=format&fit=crop&w=800&q=80"
+                alt="Hotel Sindhu Towers">
+            <div class="info">
+                <h4>Hotel Sindhu Towers</h4>
+                <p class="star">⭐️ 4.3 / 5</p>
+            </div>
+        </div>
+        <div class="nearby-card">
+            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80"
+                alt="Super Hotel OYO">
+            <div class="info">
+                <h4>Super Hotel </h4>
+                <p class="star">⭐️ 4.7 / 5</p>
+            </div>
+        </div>
+        <div class="nearby-card">
+            <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80"
+                alt="PRABHAA GRAND INN">
+            <div class="info">
+                <h4>PRABHAA GRAND INN</h4>
+                <p class="star">⭐️ 4.0 / 5</p>
+            </div>
+        </div>
+        <div class="nearby-card">
+            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80"
+                alt="New Alankar Deluxe Lodge">
+            <div class="info">
+                <h4>New Alankar Deluxe Lodge</h4>
+                <p class="star">⭐️ 4.1 / 5</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section style="margin:30px; text-align:center;">
+        <h2>Our Location</h2>
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3800.994122546411!2d79.1061!3d13.2170!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4c7f1fdd1ef1b3%3A0x1aaf2e6d4b8d4f25!2sChittoor%2C%20Andhra%20Pradesh!5e0!3m2!1sen!2sin!4v1678131034567!5m2!1sen!2sin"
+            width="80%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </section>
+
+    <footer>
+        <p>© 2026 Grand Hotel | Chittoor, Andhra Pradesh | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // Hero slideshow
+        let heroImages = document.querySelectorAll('.hero img'); let index = 0;
+        setInterval(() => { heroImages[index].classList.remove('active'); index = (index + 1) % heroImages.length; heroImages[index].classList.add('active'); }, 4000);
+
+        // Smooth scroll
+        document.querySelectorAll('.navbar a').forEach(anchor => { anchor.addEventListener('click', function (e) { e.preventDefault(); document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' }); }); });
+
+        // Booking functions
+        function selectRoom(roomName, price) {
+            document.getElementById('roomType').value = roomName;
+            calculateTotal();
+            document.getElementById('booking-sidebar').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        const bookingForm = document.getElementById('bookingForm');
+        bookingForm.addEventListener('input', calculateTotal);
+
+        function calculateTotal() {
+            const roomSelect = document.getElementById('roomType');
+            const roomOption = roomSelect.selectedOptions[0];
+            const pricePerNight = roomOption ? Number(roomOption.getAttribute('data-price')) : 0;
+            const checkin = new Date(bookingForm.checkin.value);
+            const checkout = new Date(bookingForm.checkout.value);
+            const nights = checkout > checkin ? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24)) : 0;
+            const total = pricePerNight * nights;
+            document.getElementById('totalPriceDisplay').textContent = "Total Price: ₹" + total.toLocaleString();
+        }
+
+        bookingForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = bookingForm.name.value;
+            const room = bookingForm.roomType.value;
+            const guests = bookingForm.guests.value;
+            const checkin = bookingForm.checkin.value;
+            const checkout = bookingForm.checkout.value;
+            const meal = bookingForm.mealPlan.value;
+            const bed = bookingForm.bedPreference.value;
+            const roomOption = bookingForm.roomType.selectedOptions[0];
+            const pricePerNight = Number(roomOption.getAttribute('data-price'));
+            const nights = new Date(checkout) > new Date(checkin) ? Math.ceil((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24)) : 0;
+            const total = pricePerNight * nights;
+            const confirmationBox = document.getElementById('confirmationBox');
+            confirmationBox.innerHTML = `
+<h3>Booking Confirmed!</h3>
+<p>Thank you <strong>${name}</strong>! Your booking for a <strong>${room}</strong> is confirmed.</p>
+<p>Check-in: ${checkin}</p>
+<p>Check-out: ${checkout}</p>
+<p>Nights: ${nights}</p>
+<p>Guests: ${guests}</p>
+<p>Meal Plan: ${meal}</p>
+<p>Bed Preference: ${bed}</p>
+<p>Total Price: ₹${total.toLocaleString()}</p>
+<p>Please proceed with payment using the options above.</p>
+`;
+            confirmationBox.classList.remove('hidden');
+            confirmationBox.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+
+</body>
+
+</html>
